@@ -1,0 +1,263 @@
+html {
+    background-color: #9fc5e8
+}
+
+body {
+    padding: 32px;
+    line-height: 175%;
+    margin: 0;
+    font-family: Candara, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px
+}
+
+p {
+    text-align: justify;
+    text-indent: 0;
+    margin-top: 1em;
+    margin-bottom: 1em
+}
+
+[data-litera5-hidden] {
+    display: none;
+}
+
+[data-litera5-nocheck] {
+    color: dimgrey;
+}
+
+.litera5-meta {
+    padding: 8px;
+    background: #f3f3f3;
+    border: 1px dashed #808080;
+    margin-bottom: 32px
+}
+
+.litera5-meta .meta {
+    padding: 8px;
+    border: 1px dashed #808080;
+    background: #fff;
+    margin-top: 26px;
+    margin-bottom: 0
+}
+
+.litera5-meta .meta:before {
+    display: block;
+    font-size: 12px;
+    font-weight: normal;
+    color: #a9a9a9;
+    margin-top: -33px;
+    margin-bottom: 12px
+}
+
+.litera5-meta .meta h1,
+.litera5-meta .meta h2,
+.litera5-meta .meta h3,
+.litera5-meta .meta h4,
+.litera5-meta .meta h5,
+.litera5-meta .meta h6,
+.litera5-meta .meta p {
+    margin: 0
+}
+
+.litera5-meta .meta-title:before {
+    content: 'Заголовок:'
+}
+
+.litera5-meta .meta-description:before {
+    content: 'Описание:'
+}
+
+.litera5-meta .meta-keywords h5 {
+    font-size: 16px;
+    font-weight: normal
+}
+
+.litera5-meta .meta-keywords:before {
+    content: 'Ключевые слова:'
+}
+
+.litera5-meta .meta-custom-sample:before {
+    content: 'Дополнительный параметр:'
+}
+
+.litera5-meta .meta-custom-subtitle:before {
+    content: 'Подзаголовок:'
+}
+
+.litera5-meta .meta-custom-literature:before {
+    content: 'Список литературы:'
+}
+
+span.annotation {
+    text-decoration: none
+}
+
+span.annotation.visible.mkGrammar.large {
+    background: url(../img/wavyline1.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkGrammar.small {
+    background-color: rgba(230, 132, 132, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkGrammar.active {
+    background: #ea9999;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #981f1f
+}
+
+span.annotation.visible.mkPunctuation.large {
+    background: url(../img/wavyline2.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkPunctuation.small {
+    background-color: rgba(167, 207, 151, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkPunctuation.active {
+    background: #b6d7a8;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #4c7b38
+}
+
+span.annotation.visible.mkStyle.large {
+    background: url(../img/wavyline3.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkStyle.small {
+    background-color: rgba(248, 190, 132, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkStyle.active {
+    background: #f9cb9c;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #be650b
+}
+
+span.annotation.visible.mkSpelling.large {
+    background: url(../img/wavyline4.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkSpelling.small {
+    background-color: rgba(138, 185, 227, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkSpelling.active {
+    background: #9fc5e8;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #246097
+}
+
+span.annotation.visible.mkTypography.large {
+    background: url(../img/wavyline5.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkTypography.small {
+    background-color: rgba(146, 186, 192, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkTypography.active {
+    background: #a2c4c9;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #3a5f65
+}
+
+span.annotation.visible.mkOrthoepy.large {
+    background: url(../img/wavyline6.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkOrthoepy.small {
+    background-color: rgba(191, 191, 191, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkOrthoepy.active {
+    background: #ccc;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #666
+}
+
+span.annotation.visible.mkPhonics.large {
+    background: url(../img/wavyline7.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkPhonics.small {
+    background-color: rgba(255, 223, 128, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkPhonics.active {
+    background: #ffe599;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #cc9800
+}
+
+span.annotation.visible.mkYo.large {
+    background: url(../img/wavyline8.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkYo.small {
+    background-color: rgba(205, 149, 176, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkYo.active {
+    background: #d5a6bd;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #773857
+}
+
+span.annotation.visible.mkSemantic.large {
+    background: url(../img/wavyline9.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkSemantic.small {
+    background-color: rgba(87, 143, 232, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkSemantic.active {
+    background: #6d9eeb;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #113a7b
+}
+
+span.annotation.visible.mkPaperStructure.large {
+    background: url(../img/wavyline10.gif) repeat-x 100% 100%
+}
+
+span.annotation.visible.mkPaperStructure.small {
+    background-color: rgba(127, 107, 187, 0.5);
+    padding-top: 3px;
+    padding-bottom: 3px
+}
+
+span.annotation.visible.mkPaperStructure.active {
+    background: #8e7cc3;
+    padding: 4px 0;
+    border-top: 0;
+    border-bottom: 2px solid #2f244f
+}
