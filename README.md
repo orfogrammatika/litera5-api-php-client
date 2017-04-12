@@ -100,4 +100,21 @@ API корпоративной интеграции Litera5
 * **example.pre-check** - добавлен пример использования API для предварительной проверки перед публикацией
     * подробнее вариант использования описан [здесь](http://lib.litera5.ru/OGL/92176589.html).
     * для запуска изучите инструкцию в файле **example.pre-check/README.md**
-         
+        
+### 2017-04-12
+* `Litera5\OrthoKind` — константа ORTHOEPY перенесено в CiceroKind
+* `Litera5\CiceroKind` — добавлены новые типы ошибок
+    * `TAUTOLOGY` — тавтологии
+    * `PHONICS` — неблагозвучие
+    * `ORTHOEPY` — орфоэпия
+    * `NATIVE_SPEECH` — родная речь
+* `Litera5\CheckProfile` — добавлен новый класс констант с профилями проверки
+* `Litera5\CheckOgxtRequest` — добавлен новый запрос
+* `Litera5\CheckOgxtResponse` — добавлен новый ответ
+* `Litera5\CheckState` — добавлен новый класс констант с состояниями проверки
+* `Litera5\CheckOgxtResultsRequest` — добавлен новый запрос
+* `Litera5\CheckOgxtResultsResponse` — добавлен новый ответ
+* `Litera5\API` — добавлены новые методы
+    * `checkOgxt` — запустить проверку специальным образом подготовленного текста OGXT без участия пользователя (только сервер-сервер взаимодействие). Для конвертации html -> ogxt можно воспользоваться JavaScript библиотекой [ogxt-utils](https://github.com/orfogrammatika/ogxt-utils)
+    * `checkOgxtResults` — проверить состояние проверки и получить результаты проверки
+   

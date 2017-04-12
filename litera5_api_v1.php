@@ -2,7 +2,7 @@
 
 namespace Litera5 {
 
-    const VERSION = '1.20160509';
+    const VERSION = '1.20170412';
 
     if (!defined('API_SERVER_URL')) {
         define('API_SERVER_URL', 'https://litera5.ru');
@@ -429,10 +429,6 @@ namespace Litera5 {
          */
         const TYPOGRAPHY = "mkTypography";
         /**
-         * Орфоэпия
-         */
-        const ORTHOEPY = "mkOrthoepy";
-        /**
          * Буква Ё
          */
         const YO = "mkYo";
@@ -449,6 +445,18 @@ namespace Litera5 {
      */
     class CiceroKind {
         /**
+         * Тавтологии
+         */
+        const TAUTOLOGY = "mkTautology";
+        /**
+         * Неблагозвучие
+         */
+        const PHONICS = "mkPhonics";
+        /**
+         * Орфоэпия
+         */
+        const ORTHOEPY = "mkOrthoepy";
+        /**
          * Синонимы
          */
         const SYNONYM = "mkSynonym";
@@ -456,6 +464,10 @@ namespace Litera5 {
          * Эпитеты
          */
         const EPITHET = "mkEpithet";
+        /**
+         * Родная речь
+         */
+        const NATIVE_SPEECH = "mkNativeSpeech";
     }
 
     /**
@@ -741,6 +753,251 @@ namespace Litera5 {
     }
 
     /**
+     * Class CheckProfile
+     * @package Litera5
+     */
+    class CheckProfile {
+        /**
+         * Проверка правописания
+         */
+        const ORTHO = "ortho";
+        /**
+         * Проверка красоты текста
+         */
+        const CICERO = "cicero";
+    }
+
+    /**
+     * Class CheckOgxtRequest
+     * @package Litera5
+     */
+    class CheckOgxtRequest extends BaseAPIRequest {
+        public $login = null;
+        public $profile = null;
+        public $document = null;
+        public $name = null;
+        public $html = null;
+        public $ogxt = null;
+
+        /**
+         * @param $company string
+         * @param $login string
+         * @param $html string
+         * @param $ogxt string
+         */
+        protected function __construct($company, $login, $html, $ogxt) {
+            parent::__construct($company);
+            $this->login = $login;
+            $this->html = $html;
+            $this->ogxt = $ogxt;
+        }
+
+        protected function _query(&$query) {
+            array_push($query, $this->login);
+            if (_is_filled($this->profile)) array_push($query, $this->profile);
+            if (_is_filled($this->document)) array_push($query, $this->document);
+            if (_is_filled($this->name)) array_push($query, $this->name);
+            array_push($query, $this->html);
+            array_push($query, $this->ogxt);
+        }
+
+        protected function _json(&$json) {
+            $json["login"] = $this->login;
+            if (_is_filled($this->profile)) $json["profile"] = $this->profile;
+            if (_is_filled($this->document)) $json["document"] = $this->document;
+            if (_is_filled($this->name)) $json["name"] = $this->name;
+            $json["html"] = $this->html;
+            $json["ogxt"] = $this->ogxt;
+        }
+
+        /**
+         * Создаёт новый объект запроса
+         * @param $company string
+         * @param $login string
+         * @param $html string
+         * @param $ogxt string
+         * @return CheckOgxtRequest
+         */
+        static function start($company, $login, $html, $ogxt) {
+            return new CheckOgxtRequest($company, $login, $html, $ogxt);
+        }
+
+        /**
+         * @param $val string
+         * @return $this
+         * @see CheckProfile
+         */
+        function profile($val) {
+            $this->profile = $val;
+            return $this;
+        }
+
+        /**
+         * @param $val string
+         * @return $this
+         */
+        function document($val) {
+            $this->document = $val;
+            return $this;
+        }
+
+        /**
+         * @param $val string
+         * @return $this
+         */
+        function name($val) {
+            $this->name = $val;
+            return $this;
+        }
+
+    }
+
+    /**
+     * Class CheckOgxtResponse
+     * Ответ на запрос о проверке ogxt документа
+     * @package Litera5
+     */
+    class CheckOgxtResponse extends BaseAPIResponse {
+
+        public $document = null;
+        public $check = null;
+
+        protected function _parse_json($json) {
+            $this->document = _get_or_null($json, "document");
+            $this->check = _get_or_null($json, "check");
+        }
+
+        protected function _query(&$query) {
+            array_push($query, $this->document);
+            array_push($query, $this->check);
+        }
+
+    }
+
+    /**
+     * Class CheckOgxtResultsRequest
+     * @package Litera5
+     */
+    class CheckOgxtResultsRequest extends BaseAPIRequest {
+        public $check = null;
+
+        /**
+         * @param $company string
+         * @param $check string
+         */
+        protected function __construct($company, $check) {
+            parent::__construct($company);
+            $this->check = $check;
+        }
+
+        protected function _query(&$query) {
+            array_push($query, $this->check);
+        }
+
+        protected function _json(&$json) {
+            $json["check"] = $this->check;
+        }
+
+        /**
+         * Создаёт новый объект запроса
+         * @param $company string
+         * @param $check string
+         * @return CheckOgxtResultsRequest
+         */
+        static function start($company, $check) {
+            return new CheckOgxtResultsRequest($company, $check);
+        }
+    }
+
+    class CheckState {
+        /**
+         * Проверка создана
+         */
+        const CREATED = "CREATED";
+        /**
+         * Документ загружен на сервер
+         */
+        const UPLOADED = "UPLOADED";
+        /**
+         * Проверка ожидает в очереди на оценку
+         */
+        const WAITING_ESTIMATION = "WAITING_ESTIMATION";
+        /**
+         * Документ оценивается
+         */
+        const ESTIMATING = "ESTIMATING";
+        /**
+         * Оценка завершена
+         */
+        const ESTIMATED_SUCCESS = "ESTIMATED_SUCCESS";
+        /**
+         * Оценка завершилась с ошибкой
+         */
+        const ESTIMATED_ERROR = "ESTIMATED_ERROR";
+        /**
+         * В оценке отказано
+         */
+        const ESTIMATED_REJECT = "ESTIMATED_REJECT";
+        /**
+         * Проверка отменена
+         */
+        const CANCELLED = "CANCELLED";
+        /**
+         * Документ ожидает в очереди на проверку
+         */
+        const WAITING_CHECK = "WAITING_CHECK";
+        /**
+         * Документ проверяется
+         */
+        const CHECKING = "CHECKING";
+        /**
+         * В проверке отказано
+         */
+        const REJECTED = "REJECTED";
+        /**
+         * Проверка благополучна завершилась
+         */
+        const CHECKED_SUCCESS = "CHECKED_SUCCESS";
+        /**
+         * Во время проверки произошла непредвиденная ошибка
+         */
+        const CHECKED_ERROR = "CHECKED_ERROR";
+    }
+
+    /**
+     * Class CheckOgxtResultsResponse
+     * @package Litera5
+     */
+    class CheckOgxtResultsResponse extends BaseAPIResponse {
+        /**
+         * @var string
+         * @see CheckState
+         */
+        public $state = null;
+        public $progress = null;
+        public $message = null;
+        public $html = null;
+        public $annotations = null;
+        public $stats = null;
+
+        protected function _parse_json($json) {
+            $this->state = _get_or_null($json, "state");
+            $this->progress = _get_or_null($json, "progress");
+            $this->message = _get_or_null($json, "message");
+            $this->html = _get_or_null($json, "html");
+            $this->annotations = _get_or_null($json, "annotations");
+            $this->stats = _get_or_null($json, "stats");
+        }
+
+        protected function _query(&$query) {
+            array_push($query, $this->state);
+            array_push($query, $this->progress);
+            array_push($query, $this->message);
+            if (_is_filled($this->html)) array_push($query, $this->html);
+        }
+    }
+
+    /**
      * Class API
      * API для проверки документов на сайте litera5.ru
      * @package Litera5
@@ -812,13 +1069,23 @@ namespace Litera5 {
         }
 
         /**
-         * Отменяет ранее инициированную процедуру проверки документа.
-         * @param $request CancelRequest
-         * @return CancelResponse
+         * Запускает проверку подготовленного текстового документа (без участия пользователя)
+         * @param $request CheckOgxtRequest
+         * @return CheckOgxtResponse
          */
-        function cancel($request) {
-            $resp = $this->_query(url("/api/pub/cancel/"), $request->sign($this->sign)->json());
-            return new CancelResponse($this->sign, $resp['code'], $resp['body']);
+        function checkOgxt($request) {
+            $resp = $this->_query(url("/api/pub/check-ogxt/"), $request->sign($this->sign)->json());
+            return new CheckOgxtResponse($this->sign, $resp['code'], $resp['body']);
+        }
+
+        /**
+         * Проверяет текущее состояние проверки и получает результаты проверки
+         * @param $request CheckOgxtResultsRequest
+         * @return CheckOgxtResultsResponse
+         */
+        function checkOgxtResults($request) {
+            $resp = $this->_query(url("/api/pub/check-ogxt-results/"), $request->sign($this->sign)->json());
+            return new CheckOgxtResultsResponse($this->sign, $resp['code'], $resp['body']);
         }
     }
 
