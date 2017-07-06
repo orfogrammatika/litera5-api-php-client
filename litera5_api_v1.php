@@ -224,6 +224,7 @@ namespace Litera5 {
         private $show_cancel_button = null;
         private $editor_css = null;
         private $get_stats = null;
+        private $hide_editor_toolbar = null;
 
 
         /**
@@ -325,6 +326,15 @@ namespace Litera5 {
             return $this;
         }
 
+        /**
+         * @param $val boolean
+         * @return $this
+         */
+        function hide_editor_toolbar($val) {
+            $this->hide_editor_toolbar = $val;
+            return $this;
+        }
+
         protected function _query(&$query) {
             if (_is_filled($this->on_save_corrected)) array_push($query, $this->on_save_corrected);
             if (_is_filled($this->on_iframe_failure)) array_push($query, $this->on_iframe_failure);
@@ -337,6 +347,7 @@ namespace Litera5 {
             if (_is_filled($this->show_cancel_button)) array_push($query, _bool_2_str($this->show_cancel_button));
             if (_is_filled($this->editor_css)) array_push($query, $this->editor_css);
             if (_is_filled($this->get_stats)) array_push($query, _bool_2_str($this->get_stats));
+            if (_is_filled($this->hide_editor_toolbar)) array_push($query, _bool_2_str($this->hide_editor_toolbar));
         }
 
         protected function _json(&$json) {
@@ -351,6 +362,7 @@ namespace Litera5 {
             if (_is_filled($this->show_cancel_button)) $json["showCancelButton"] = $this->show_cancel_button;
             if (_is_filled($this->editor_css)) $json["editorCss"] = $this->editor_css;
             if (_is_filled($this->get_stats)) $json["getStats"] = $this->get_stats;
+            if (_is_filled($this->hide_editor_toolbar)) $json["hideEditorToolbar"] = $this->hide_editor_toolbar;
         }
 
         /**
