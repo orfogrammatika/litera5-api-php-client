@@ -402,14 +402,17 @@ namespace Litera5 {
 		const USE_DICTIONARY = "USE_DICTIONARY";
 		/**
 		 * Пользователю запрещено работать с закладкой "Красота"
+		 * @deprecated используйте параметр `checksCicero` чтобы контролировать режим работы с закладкой "Красота"
 		 */
 		const DISABLE_CICERO = "DISABLE_CICERO";
 		/**
 		 * Пользователю запрещено работать с закладкой "Качество"
+		 * @deprecated используйте параметр `checksQuality` чтобы контролировать режим работы с закладкой "Качество"
 		 */
 		const DISABLE_QUALITY = "DISABLE_QUALITY";
 		/**
 		 * Пользователю запрещено при работе через апи делать повторные проверки
+		 * @deprecated используйте параметр `checksTotal` чтобы контролировать режим работы с закладкой "Грамотность"
 		 */
 		const DISABLE_API_SECONDARY_ORFO_CHECKS = "DISABLE_API_SECONDARY_ORFO_CHECKS";
 	}
@@ -511,6 +514,10 @@ namespace Litera5 {
 		private $ortho_kinds = null;
 		private $cicero_kinds = null;
 		private $quality_kinds = null;
+		private $checks_ortho = null;
+		private $checks_cicero = null;
+		private $checks_quality = null;
+		private $checks_total = null;
 
 		/**
 		 * @param $company string
@@ -579,6 +586,42 @@ namespace Litera5 {
 			return $this;
 		}
 
+		/**
+		 * @param $val int
+		 * @return $this
+		 */
+		function checks_ortho($val) {
+			$this->checks_ortho = $val;
+			return $this;
+		}
+
+		/**
+		 * @param $val int
+		 * @return $this
+		 */
+		function checks_cicero($val) {
+			$this->checks_cicero = $val;
+			return $this;
+		}
+
+		/**
+		 * @param $val int
+		 * @return $this
+		 */
+		function checks_quality($val) {
+			$this->checks_quality = $val;
+			return $this;
+		}
+
+		/**
+		 * @param $val int
+		 * @return $this
+		 */
+		function checks_total($val) {
+			$this->checks_total = $val;
+			return $this;
+		}
+
 		protected function _query(&$query) {
 			array_push($query, $this->login);
 			if (_is_filled($this->name)) array_push($query, $this->name);
@@ -603,6 +646,18 @@ namespace Litera5 {
 					array_push($query, $p);
 				}
 			}
+			if (_is_filled($this->checks_ortho)) {
+				array_push($query, $this->checks_ortho);
+			}
+			if (_is_filled($this->checks_cicero)) {
+				array_push($query, $this->checks_cicero);
+			}
+			if (_is_filled($this->checks_quality)) {
+				array_push($query, $this->checks_quality);
+			}
+			if (_is_filled($this->checks_total)) {
+				array_push($query, $this->checks_total);
+			}
 		}
 
 		protected function _json(&$json) {
@@ -613,6 +668,10 @@ namespace Litera5 {
 			if (_is_filled($this->ortho_kinds)) $json["orthoKinds"] = $this->ortho_kinds;
 			if (_is_filled($this->cicero_kinds)) $json["ciceroKinds"] = $this->cicero_kinds;
 			if (_is_filled($this->quality_kinds)) $json["qualityKinds"] = $this->quality_kinds;
+			if (_is_filled($this->checks_ortho)) $json["checksOrtho"] = $this->checks_ortho;
+			if (_is_filled($this->checks_cicero)) $json["checksCicero"] = $this->checks_cicero;
+			if (_is_filled($this->checks_quality)) $json["checksQuality"] = $this->checks_quality;
+			if (_is_filled($this->checks_total)) $json["checksTotal"] = $this->checks_total;
 		}
 
 		/**
