@@ -20,10 +20,10 @@
 
 Начать тестовую проверку документа с текстом из файлов примера `__sample.html` и `__sample.ogxt`
 ```bash
-> ./__check.curl.sh 'litera5-user' "$(cat ./__sample.html)" "$(cat ./__sample.ogxt)"
+> ./__check.curl.sh "litera5-user" "$(cat ./__sample.html)" "$(cat ./__sample.ogxt)"
 ```
 
 В результате работы этого скрипта вы получите идентификатор проверки, который надо будет передать в качестве параметра в скрипт `results.php` выполнив команду:
 ```bash
-> ./__results.curl.sh 'check-id'
+> ./__results.curl.sh "check-id"
 ```
