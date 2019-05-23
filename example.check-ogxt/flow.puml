@@ -1,0 +1,39 @@
+@startuml
+
+actor Журналист as U
+boundary "Браузер (JS)" as JS
+control cms.company.ru as PHP
+control litera5.ru as API
+
+U --> JS : Редактирует текст
+U --> JS : Нажимает кнопку "Проверить"
+activate JS
+    JS --> JS : var utils = require('ogxt-utils');
+    JS --> JS : var ogxt = utils.html2ogxt(html, true);
+    JS --> PHP : POST check.php html, ogxt
+    activate PHP
+    PHP --> API : POST api/pub/check-ogxt
+    activate API
+        API --> PHP : $resp
+    deactivate API
+    PHP --> JS : $resp->check
+    deactivate PHP
+
+    loop каждую секунду, пока не будут получены результаты
+        JS --> PHP : POST results.php check
+        activate PHP
+            PHP --> API : POST api/pub/check-ogxt-results
+            activate API
+                API --> PHP : $resp
+            deactivate API
+            alt Litera5\CheckState::CHECKED_SUCCESS != $resp->state
+                PHP --> JS : $resp->progress, $resp->message
+            else Litera5\CheckState::CHECKED_SUCCESS == $resp->state
+                PHP --> JS : $resp->annotations, $resp->stats
+            end
+        deactivate PHP
+    end
+    JS --> U : Результаты проверки
+deactivate JS
+
+@enduml
