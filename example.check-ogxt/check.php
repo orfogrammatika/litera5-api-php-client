@@ -28,6 +28,7 @@ if ($resp->is_success()) {
         exit;
     } else {
         print "Ошибка проверки подписи.";
+        print_r($resp);
     }
 } else {
     print "Ошибка запроса\n";
