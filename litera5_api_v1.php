@@ -1118,28 +1118,44 @@ namespace Litera5 {
 			$this->sign = new Signature($apiKey);
 		}
 
+		function _assert($val, $message) {
+		    if (!$val) {
+		        error_log($message);
+            }
+        }
+
+        function _setopt($ch, $option, $value) {
+            $opt_set = curl_setopt($ch, $option, $value);
+            $this->_assert($opt_set, "!!! FAILED !!!    curl_setopt(\$ch, ". $option . ", " . print_r($value, true) . ")");
+        }
+
 		function _query($url, $request) {
 			$data_string = $request;
-			$ch = curl_init($url);
-			curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-							'Content-Type: application/json; charset=utf-8',
-							'Content-Length: ' . strlen($data_string))
-			);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-			curl_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
+			try {
+                $ch = curl_init($url);
+                $this->_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                $this->_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+                $this->_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $this->_setopt($ch, CURLOPT_HTTPHEADER, array(
+                        'Content-Type: application/json; charset=utf-8',
+                        'Content-Length: ' . strlen($data_string))
+                );
 
-			$data = curl_exec($ch);
+                $this->_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                $this->_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                $this->_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
 
-			$code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $data = curl_exec($ch);
 
-			$body = $data;
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-			curl_close($ch);
+                $body = $data;
 
+                curl_close($ch);
+            } catch (Exception $e) {
+			    $code = "999";
+			    $body = $e->getMessage();
+            }
 			return array(
 					'code' => $code,
 					'body' => $body
