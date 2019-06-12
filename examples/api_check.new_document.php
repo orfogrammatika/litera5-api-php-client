@@ -21,6 +21,10 @@ function cms_extract_document_name() {
     return "Отличный документ";
 }
 
+function cms_extract_document_description() {
+    return "Просто замечательный";
+}
+
 function cms_extract_html_to_check() {
     return '<h1>Загаловак дакумента для праверки.</h1><p>О тут должон буть текст документа. <img src="http://cs607118.vk.me/v607118554/830f/MbIcpVlpbK4.jpg" data-custom-base-src="/imgs/test.jpg"></p> <img src="../../imgs/test1.jpg"> <a href="http://www.ru">link</a> <a href="/some/path">another</a> <a href="../../some/path">and more</a> <div class="gallery" did="123" data-did="123"></div>';
 }
