@@ -456,6 +456,10 @@ namespace Litera5 {
          * @deprecated используйте параметр `checksTotal` чтобы контролировать режим работы с закладкой "Грамотность"
          */
         const DISABLE_API_SECONDARY_ORFO_CHECKS = "DISABLE_API_SECONDARY_ORFO_CHECKS";
+        /**
+         * Пользователю нельзя пользоваться веб-интерфейсом (только API)
+         */
+        const DISABLE_WEB_INTERFACE = "DISABLE_WEB_INTERFACE";
     }
 
     /**
