@@ -2,15 +2,13 @@
 
 namespace Litera5 {
 
-    const VERSION = '1.20170412';
+    const VERSION = '1.20201002';
 
-    if (!defined('API_SERVER_URL')) {
-        define('API_SERVER_URL', 'https://litera5.ru');
-    }
+    defined('API_SERVER_URL') or define('API_SERVER_URL', 'https://litera5.ru');
 
-    if (!defined('API_IFRAME_URL')) {
-        define('API_IFRAME_URL', 'https://litera5.ru');
-    }
+    defined('API_IFRAME_URL') or define('API_IFRAME_URL', 'https://litera5.ru');
+
+    defined('API_DEBUG_LOG') or define('API_DEBUG_LOG', false);
 
     function url($url)
     {
@@ -599,9 +597,9 @@ namespace Litera5 {
         }
 
         /**
-         * @see @UserPermission
          * @param $val array
          * @return $this
+         * @see @UserPermission
          */
         function permissions($val)
         {
@@ -610,9 +608,9 @@ namespace Litera5 {
         }
 
         /**
-         * @see @OrthoKind
          * @param $val array
          * @return $this
+         * @see @OrthoKind
          */
         function ortho_kinds($val)
         {
@@ -621,9 +619,9 @@ namespace Litera5 {
         }
 
         /**
-         * @see @CiceroKind
          * @param $val array
          * @return $this
+         * @see @CiceroKind
          */
         function cicero_kinds($val)
         {
@@ -632,9 +630,9 @@ namespace Litera5 {
         }
 
         /**
-         * @see @QualityKind
          * @param $val
          * @return $this
+         * @see @QualityKind
          */
         function quality_kinds($val)
         {
@@ -1207,6 +1205,62 @@ namespace Litera5 {
         }
     }
 
+    function _dlog($message)
+    {
+        if (API_DEBUG_LOG) {
+            if (!is_string($message)) {
+                $message = print_r($message);
+            }
+            if (defined('API_DEBUG_FILE')) {
+                error_log($message . "\n", 3, API_DEBUG_FILE);
+            } else {
+                error_log($message);
+            }
+        }
+    }
+
+    function _dp($message)
+    {
+        if (!is_string($message)) {
+            $message = print_r($message);
+        }
+        _dlog($message);
+        print $message . "\n";
+    }
+
+    function hasCommand($command)
+    {
+        $windows = strpos(PHP_OS, 'WIN') === 0;
+        $test = $windows ? 'where' : 'command -v';
+        return is_executable(trim(shell_exec("$test $command")));
+    }
+
+    function _ping($host)
+    {
+        if (hasCommand('ping.exe')) {
+            return shell_exec('ping -n 5 ' . $host);
+        } else if (hasCommand('ping')) {
+            return shell_exec('ping -c 5 ' . $host);
+        }
+    }
+
+    function _trace($host)
+    {
+        if (hasCommand('traceroute')) {
+            return shell_exec('traceroute -n ' . $host);
+        } else if (hasCommand('tracert')) {
+            return shell_exec('tracert -d ' . $host);
+        }
+    }
+
+    function _dns($host)
+    {
+        $dns = dns_get_record($host, DNS_A);
+        return array_map(function ($row) {
+            return $row['ip'];
+        }, $dns);
+    }
+
     /**
      * Class API
      * API для проверки документов на сайте litera5.ru
@@ -1216,10 +1270,12 @@ namespace Litera5 {
     {
 
         private $sign;
+        private $sign_key;
 
         function __construct($apiKey)
         {
             $this->sign = new Signature($apiKey);
+            $this->sign_key = $apiKey;
         }
 
         function _assert($val, $message)
@@ -1237,6 +1293,8 @@ namespace Litera5 {
 
         function _query($url, $request)
         {
+            _dlog($url);
+            _dlog(print_r($request));
             $data_string = $request;
             try {
                 $ch = curl_init($url);
@@ -1263,10 +1321,155 @@ namespace Litera5 {
                 $code = "999";
                 $body = $e->getMessage();
             }
+            _dlog('code: ' . $code);
+            _dlog('body: ' . $body);
             return array(
                 'code' => $code,
                 'body' => $body
             );
+        }
+
+        private function _dheader()
+        {
+            _dp('====================< Диагностика API Литера5 >====================');
+            _dp('');
+            _dp('!!! ВНИМАНИЕ!!! Файл диагностики содержит секретные настроки API');
+            _dp('!!! используйте его скрытно и не передавайте третьим лицам, кроме');
+            _dp('!!! доверенных сотрудников службы поддержки Литера5.');
+            _dp('');
+            _dp('!!! Если скрипт выполняется через сервер, а не локально,');
+            _dp('!!! то обязательно удалите его сразу же после получения');
+            _dp('!!! данных для диагностики. Не оставляйте в свободном доступе.');
+            _dp('');
+            _dp('!!! Прежде чем отправлять результаты диагностики в службу поддержки,');
+            _dp('!!! пожалуйста, внимательно изучите его содержимое, возможно это уже');
+            _dp('!!! натолкнёт вас на какие-то полезные мысли. Если у вас на локальной');
+            _dp('!!! отладочной машине всё работает, а при переносе на боевой сервер');
+            _dp('!!! что-то идёт "не так", то попробуйте запустить скрипт диагностики');
+            _dp('!!! там и там, а затем сравнить полученные результаты.');
+            _dp('');
+            _dp('---');
+            _dp('Спасибо, что выбрали наш продукт,');
+            _dp('команда Литера5.');
+            _dp('');
+            _dp('Дата: ' . date(DATE_ISO8601, time()));
+            _dp('');
+        }
+
+        private function _dconfig()
+        {
+            _dp('--------------------< Конфигурация API >--------------------');
+            _dp('');
+            _dp('VERSION => "' . VERSION . '"');
+            _dp('API_SERVER_URL => "' . API_SERVER_URL . '"');
+            _dp('API_IFRAME_URL => "' . API_IFRAME_URL . '"');
+            _dp('API_DEBUG_LOG => "' . API_DEBUG_LOG . '"');
+            defined('API_DEBUG_FILE') and _dp('API_DEBUG_FILE => "' . API_DEBUG_FILE . '"');
+            defined('API_SECRET_KEY') and _dp('API_SECRET_KEY => "' . API_SECRET_KEY . '"');
+            _dp('API_SIGN_KEY => "' . $this->sign_key . '"');
+            defined('COMPANY') and _dp('COMPANY => "' . COMPANY . '"');
+            _dp('');
+        }
+
+        private function _ddns($ips)
+        {
+            _dp('--------------------< Записи DNS >--------------------');
+            _dp('');
+            _dp('litera5.ru');
+            for ($i = 0; $i < count($ips); ++$i) {
+                _dp('IP => ' . $ips[$i]);
+            }
+            _dp('');
+        }
+
+        private function _dping($ips)
+        {
+            _dp('--------------------< ping >--------------------');
+            _dp('');
+            for ($i = 0; $i < count($ips); ++$i) {
+                $ip = $ips[$i];
+                _dp('ping ' . $ip);
+                _dp(_ping($ip));
+            }
+            _dp('');
+        }
+
+        private function _dtrace($ips)
+        {
+            _dp('--------------------< traceroute >--------------------');
+            _dp('');
+            $dns = dns_get_record('litera5.ru', DNS_A);
+            for ($i = 0; $i < count($ips); ++$i) {
+                $ip = $ips[$i];
+                _dp('traceroute ' . $ip);
+                _dp(_trace($ip));
+            }
+            _dp('');
+        }
+
+        private function _dlitera()
+        {
+            _dp('--------------------< Версия API Литера5 >--------------------');
+            _dp('');
+            $url = url('/api/pub/version/');
+            _dp('curl GET ' . $url);
+            try {
+                $ch = curl_init($url);
+                $this->_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $this->_setopt($ch, CURLOPT_HEADER, true);
+                $this->_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                $this->_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                $this->_setopt($ch, CURLOPT_SSL_CIPHER_LIST, 'TLSv1');
+
+                $data = curl_exec($ch);
+
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                $body = $data;
+                curl_close($ch);
+            } catch (Exception $e) {
+                $code = "999";
+                $body = $e->getMessage();
+            }
+            _dp('code => ' . $code);
+            _dp('body => ' . $body);
+            _dp('');
+        }
+
+        private function _dphpinfo()
+        {
+            _dp('--------------------< PHP Info >--------------------');
+            ob_start();
+            phpinfo(INFO_GENERAL | INFO_CONFIGURATION | INFO_MODULES | INFO_ENVIRONMENT | INFO_VARIABLES);
+            $msg = ob_get_contents();
+            ob_get_clean();
+            _dp($msg);
+        }
+
+        private function _dfooter()
+        {
+            _dp('--------------------< Дополнительная диагностика >--------------------');
+            _dp('');
+            _dp('Для проверки коннективности до серверов Литеры можно также использовать программы TCP трассировки:');
+            _dp('https://support.opendns.com/hc/en-us/articles/227989007-How-to-Running-a-TCP-Traceroute');
+            _dp('');
+            _dp('====================< Конец >====================');
+        }
+
+        /**
+         * Выполняет некоторые проверки и собирает диагностическую информацию для
+         * выявления проблем интеграции
+         */
+        function diagnose()
+        {
+            $this->_dheader();
+            $this->_dconfig();
+            $ips = _dns('litera5.ru');
+            $this->_ddns($ips);
+            $this->_dping($ips);
+            $this->_dtrace($ips);
+            $this->_dlitera();
+            $this->_dphpinfo();
+            $this->_dfooter();
         }
 
         /**
