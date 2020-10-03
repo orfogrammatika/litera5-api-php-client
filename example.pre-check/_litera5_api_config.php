@@ -1,7 +1,5 @@
 <?php
 
-define('API_SERVER_URL', 'http://localhost:8080/www');
-
 require_once "../litera5_api_v1.php";
 
 /**
