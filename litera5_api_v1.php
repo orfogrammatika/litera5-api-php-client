@@ -1209,7 +1209,7 @@ namespace Litera5 {
     {
         if (API_DEBUG_LOG) {
             if (!is_string($message)) {
-                $message = print_r($message);
+                $message = print_r($message, true);
             }
             if (defined('API_DEBUG_FILE')) {
                 error_log($message . "\n", 3, API_DEBUG_FILE);
@@ -1222,7 +1222,7 @@ namespace Litera5 {
     function _dp($message)
     {
         if (!is_string($message)) {
-            $message = print_r($message);
+            $message = print_r($message, true);
         }
         _dlog($message);
         print $message . "\n";
@@ -1293,8 +1293,9 @@ namespace Litera5 {
 
         function _query($url, $request)
         {
-            _dlog($url);
-            _dlog(print_r($request));
+            _dlog('');
+            _dlog('curl POST ' . $url);
+            _dlog('  request => ' . $request);
             $data_string = $request;
             try {
                 $ch = curl_init($url);
@@ -1321,8 +1322,10 @@ namespace Litera5 {
                 $code = "999";
                 $body = $e->getMessage();
             }
-            _dlog('code: ' . $code);
-            _dlog('body: ' . $body);
+            _dlog('  response =>');
+            _dlog('    code => ' . $code);
+            _dlog('    body => ' . $body);
+            _dlog('');
             return array(
                 'code' => $code,
                 'body' => $body
